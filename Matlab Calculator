@@ -1,0 +1,6 @@
+borrowed=1000;
+first_interest= 0.1*borrowed;
+new_borrowed = first_interest + borrowed;
+second_interest= 0.1*new_borrowed;
+debt = new_borrowed + second_interest;
+disp(debt)
