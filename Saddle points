@@ -1,0 +1,46 @@
+Q. Write a function called saddle that finds saddle points in the input matrix M. For the purposes of this problem, a saddle point is defined as an element whose value is greater
+than or equal to every element in its row, and less than or equal to every element in its column. Note that there may be more than one saddle point in M. Return a matrix called
+indices that has exactly two columns. Each row of indices corresponds to one saddle point with the first element of the row containing the row index of the saddle point and
+the second element containing the column index. If there is no saddle point in M, then indices is the empty array.
+
+/* Solution 1 using Loop */
+
+function s = saddle(M)
+[r, c] = size(M);
+% Initialize the saddle points to an empty array
+s = [];
+% Check the dimensions to see if input is a row or column vector
+if r > 1
+    cols = min(M);          % find the min value in each column if more than 1 row
+else
+    cols = M;               % vector is a special case, min would give a single value
+end
+if c > 1
+    rows = max(M');         % find the max value in each row
+else
+    rows = M;               % vector is a special case, max would give a single value
+end
+for ii = 1:c                % visit each column
+    for jj = 1:r            % and each row, that is, each element of M
+        if M(jj,ii) == cols(ii) && M(jj,ii) == rows(jj) % if both conditions hold
+            s = [s; jj ii];                             % saddle point! Let's add it!
+        end
+    end
+end
+
+/*Solution 2 using implicit expansion*/
+
+function s = saddle(M)   
+% Create logical vector that are true for each saddle condition separately 
+    minLocs = M <= min(M, [], 1);
+    maxLocs = M >= max(M, [], 2);
+% Find the indices where both conditions are true!
+    [row, col] = find(minLocs & maxLocs);
+% If the input is a row vector, row and col returned from the find
+% function need to be transposed to fit the output format
+    if isrow(M)
+        s = [row', col'];
+    else
+        s = [row, col];
+    end
+end
